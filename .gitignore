@@ -21,6 +21,7 @@ gpioget-glib
 gpioset-glib
 gpiomon-glib
 gpiofind-glib
+gpio-dbus
 *.o
 *.lo
 *.la
@@ -30,6 +31,7 @@ libgpiodcxx.pc
 *.tar.gz
 *.patch
 *.swp
+generated-*
 
 # autotools stuff
 .deps/
