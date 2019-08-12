@@ -28,10 +28,11 @@ static const struct option longopts[] = {
 	{ "falling-edge",	no_argument,		NULL,	'f' },
 	{ "line-buffered",	no_argument,		NULL,	'b' },
 	{ "format",		required_argument,	NULL,	'F' },
+	{ "script",		required_argument,	NULL,	'S' },
 	{ GETOPT_NULL_LONGOPT },
 };
 
-static const char *const shortopts = "+hvln:srfbF:";
+static const char *const shortopts = "+hvln:srfF:S:";
 
 static void print_help(void)
 {
@@ -49,6 +50,7 @@ static void print_help(void)
 	printf("  -f, --falling-edge:\tonly process falling edge events\n");
 	printf("  -b, --line-buffered:\tset standard output as line buffered\n");
 	printf("  -F, --format=FMT\tspecify custom output format\n");
+	printf("  -S, --script=SCT\tspecify script to run upon completion\n");
 	printf("\n");
 	printf("Format specifiers:\n");
 	printf("  %%o:  GPIO line offset\n");
@@ -64,6 +66,7 @@ struct mon_ctx {
 
 	bool silent;
 	char *fmt;
+	char *sct;
 
 	int sigfd;
 };
@@ -214,7 +217,8 @@ static int event_callback(int event_type, unsigned int line_offset,
 		return GPIOD_CTXLESS_EVENT_CB_RET_OK;
 	}
 
-	if (ctx->events_wanted && ctx->events_done >= ctx->events_wanted)
+	if (ctx->events_wanted && ctx->events_done >= ctx->events_wanted) {
+		system(ctx->sct);
 		return GPIOD_CTXLESS_EVENT_CB_RET_STOP;
 
 	return GPIOD_CTXLESS_EVENT_CB_RET_OK;
@@ -285,6 +289,9 @@ int main(int argc, char **argv)
 			break;
 		case 'F':
 			ctx.fmt = optarg;
+			break;
+		case 'S':
+			ctx.sct = optarg;
 			break;
 		case '?':
 			die("try %s --help", get_progname());
