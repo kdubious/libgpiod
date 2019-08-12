@@ -220,6 +220,7 @@ static int event_callback(int event_type, unsigned int line_offset,
 	if (ctx->events_wanted && ctx->events_done >= ctx->events_wanted) {
 		system(ctx->sct);
 		return GPIOD_CTXLESS_EVENT_CB_RET_STOP;
+	}
 
 	return GPIOD_CTXLESS_EVENT_CB_RET_OK;
 }
