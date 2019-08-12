@@ -1,0 +1,1 @@
+git diff origin/master upstream/v1.3.x > 0001-libgpiod-patch.patch
